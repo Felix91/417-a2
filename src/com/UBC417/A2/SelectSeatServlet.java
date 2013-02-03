@@ -17,11 +17,20 @@ public class SelectSeatServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 
-		String flight = req.getParameter("Flight");
+		String flight1 = req.getParameter("Flight1");
+		String flight2 = req.getParameter("Flight2");
+		String flight3 = req.getParameter("Flight3");
+		String flight4 = req.getParameter("Flight4");
 		
-		Iterable<Entity> flightSeats = Seat.GetFreeSeats(flight);
+		Iterable<Entity> flight1Seats = Seat.GetFreeSeats(flight1);
+		Iterable<Entity> flight2Seats = Seat.GetFreeSeats(flight2);
+		Iterable<Entity> flight3Seats = Seat.GetFreeSeats(flight3);
+		Iterable<Entity> flight4Seats = Seat.GetFreeSeats(flight4);
 		
-		req.setAttribute("flightSeats", flightSeats);
+		req.setAttribute("flight1Seats", flight1Seats);
+		req.setAttribute("flight2Seats", flight2Seats);
+		req.setAttribute("flight3Seats", flight3Seats);
+		req.setAttribute("flight4Seats", flight4Seats);
 		
 		//redirect to index.jsp
 		ServletContext sc = getServletContext();

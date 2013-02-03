@@ -30,9 +30,36 @@
 						<td><strong>Trip</strong></td>
 					</tr>
 					<tr>
-						<td>Flight</td>
+						<td>Flight 1</td>
 						<td>
-							<select name="Flight">
+							<select name="Flight1">
+								<option value="">Please select a flight.</option>
+							<% for( Entity e : list ) { %>
+								<option value="<%=e.getKey().getName()%>"><%=e.getKey().getName() %></option>
+							<%} %>
+							</select>
+						</td>
+						<td>Flight 2</td>
+						<td>
+							<select name="Flight2">
+								<option value="">Please select a flight.</option>
+							<% for( Entity e : list ) { %>
+								<option value="<%=e.getKey().getName()%>"><%=e.getKey().getName() %></option>
+							<%} %>
+							</select>
+						</td>
+						<td>Flight 3</td>
+						<td>
+							<select name="Flight3">
+								<option value="">Please select a flight.</option>
+							<% for( Entity e : list ) { %>
+								<option value="<%=e.getKey().getName()%>"><%=e.getKey().getName() %></option>
+							<%} %>
+							</select>
+						</td>
+						<td>Flight 4</td>
+						<td>
+							<select name="Flight4">
 								<option value="">Please select a flight.</option>
 							<% for( Entity e : list ) { %>
 								<option value="<%=e.getKey().getName()%>"><%=e.getKey().getName() %></option>

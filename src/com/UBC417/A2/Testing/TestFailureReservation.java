@@ -30,6 +30,11 @@ public class TestFailureReservation extends TestCase {
 		
 	}
 
+	/**
+	 * Tests if cross-group transaction will reject an the booking of 4 seats when
+	 * one of the seats is already taken
+	 * @throws Exception
+	 */
 	public void testUnSuccessfulReservation() throws Exception
 	{
 		//=================================================================

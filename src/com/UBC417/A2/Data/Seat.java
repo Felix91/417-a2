@@ -82,8 +82,44 @@ public class Seat {
 	public static boolean ReserveSeats(String Flight1, String Flight1Seat,
 			String Flight2, String Flight2Seat, String Flight3,
 			String Flight3Seat, String Flight4, String Flight4Seat,
-			String FirstName, String LastName) throws Exception {
-
-		throw new Exception("Not Implemented");
+			String FirstName, String LastName) throws EntityNotFoundException {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		
+		for (int i = 0; i < 10; i++) {
+			TransactionOptions options = TransactionOptions.Builder.withXG(true);
+			Transaction tx = ds.beginTransaction(options);
+			try {
+				Entity e1 = ds.get(tx, KeyFactory.createKey(Flight1, Flight1Seat));
+				Entity e2 = ds.get(tx, KeyFactory.createKey(Flight2, Flight2Seat));
+				Entity e3 = ds.get(tx, KeyFactory.createKey(Flight3, Flight3Seat));
+				Entity e4 = ds.get(tx, KeyFactory.createKey(Flight4, Flight4Seat));
+				
+				if (	e1.getProperty("PersonSitting") != null ||
+						e2.getProperty("PersonSitting") != null ||
+						e3.getProperty("PersonSitting") != null ||
+						e4.getProperty("PersonSitting") != null)
+					return false;
+				
+				e1.setProperty("PersonSitting", FirstName + " " + LastName);
+				e2.setProperty("PersonSitting", FirstName + " " + LastName);
+				e3.setProperty("PersonSitting", FirstName + " " + LastName);
+				e4.setProperty("PersonSitting", FirstName + " " + LastName);
+				
+				ds.put(tx, e1);
+				ds.put(tx, e2);
+				ds.put(tx, e3);
+				ds.put(tx, e4);
+				
+				tx.commit();
+				return true;
+			} catch (ConcurrentModificationException e) {
+				// continue
+			} finally {
+				if (tx.isActive())
+					tx.rollback();
+			}
+		}
+		throw new ConcurrentModificationException();	
 	}
+	
 }

@@ -26,15 +26,22 @@ public class ReserveSeatServlet extends HttpServlet {
 			throws IOException, ServletException {
 
 		// Get parameters
-		String Flight = req.getParameter("Flight");		
-		String SeatID = req.getParameter("SeatID");
+		String Flight1 = req.getParameter("Flight1");		
+		String Seat1ID = req.getParameter("Seat1ID");
+		String Flight2 = req.getParameter("Flight2");		
+		String Seat2ID = req.getParameter("Seat2ID");
+		String Flight3 = req.getParameter("Flight3");		
+		String Seat3ID = req.getParameter("Seat3ID");
+		String Flight4 = req.getParameter("Flight4");		
+		String Seat4ID = req.getParameter("Seat4ID");
 		
 		String FirstName = req.getParameter("FirstName");
 		String LastName = req.getParameter("LastName");
 		
 		String forwardTo = "/seatConfirmation.jsp";
 		try {
-			if (!Seat.ReserveSeat(Flight, SeatID, FirstName, LastName)) {
+			//if (!Seat.ReserveSeat(Flight, SeatID, FirstName, LastName)) {
+			if (!Seat.ReserveSeats(Flight1, Seat1ID, Flight2, Seat2ID, Flight3, Seat3ID, Flight4, Seat4ID, FirstName, LastName)) {
 				// seat not reserved, show error page
 				forwardTo = "/reserveSeatError.jsp";
 			}

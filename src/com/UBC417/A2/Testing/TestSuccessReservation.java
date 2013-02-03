@@ -30,6 +30,10 @@ public class TestSuccessReservation extends TestCase {
 		
 	}
 
+	/**
+	 * Tests if cross-group transaction will accept the booking of 4 seats at once
+	 * @throws Exception
+	 */
 	public void testSuccessfulReservation() throws Exception
 	{
 		//=================================================================
