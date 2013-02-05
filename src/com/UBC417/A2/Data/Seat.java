@@ -11,6 +11,11 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Transaction;
 import com.google.appengine.api.datastore.TransactionOptions;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.*;
+
+
 
 //Helper class for flight seats.
 public class Seat {
@@ -82,7 +87,7 @@ public class Seat {
 	public static boolean ReserveSeats(String Flight1, String Flight1Seat,
 			String Flight2, String Flight2Seat, String Flight3,
 			String Flight3Seat, String Flight4, String Flight4Seat,
-			String FirstName, String LastName) throws EntityNotFoundException {
+			String FirstName, String LastName) throws Exception {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		
 		for (int i = 0; i < 10; i++) {
@@ -98,7 +103,13 @@ public class Seat {
 						e2.getProperty("PersonSitting") != null ||
 						e3.getProperty("PersonSitting") != null ||
 						e4.getProperty("PersonSitting") != null)
+				{
+					// Seat is taken. Create SeatReservation and add a task into push queue
+					SeatReservation.CreateReservation(Flight1, Flight1Seat, Flight2, Flight2Seat, Flight3, Flight3Seat, Flight4, Flight4Seat, FirstName, LastName, true);
+					Queue q = QueueFactory.getDefaultQueue();
+					q.add(withUrl("/worker"));
 					return false;
+				}
 				
 				e1.setProperty("PersonSitting", FirstName + " " + LastName);
 				e2.setProperty("PersonSitting", FirstName + " " + LastName);

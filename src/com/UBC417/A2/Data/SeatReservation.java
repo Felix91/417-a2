@@ -61,7 +61,7 @@ public class SeatReservation {
 		return e;
 	}
 
-	// Get all flights in the datastore
+	// Get all reservations in the datastore
 	public static Iterable<Entity> GetReservations() {
 		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 		Query q = new Query("SeatReservation").addSort( "date", SortDirection.ASCENDING);

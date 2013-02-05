@@ -48,6 +48,9 @@ public class ReserveSeatServlet extends HttpServlet {
 		} catch (EntityNotFoundException e) {
 			// seat not found, show error page
 			forwardTo = "/reserveSeatError.jsp";
+		} catch (Exception e) {
+			// Do nothing
+			e.printStackTrace();
 		}
 
 		// redirect to final page

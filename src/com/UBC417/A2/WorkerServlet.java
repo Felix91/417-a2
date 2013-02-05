@@ -20,7 +20,12 @@ public class WorkerServlet extends HttpServlet {
 	public void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws IOException, ServletException {
 
-			Worker.Process();	
+			try {
+				Worker.Process();
+			} catch (Exception e) {
+				// Do nothing
+				e.printStackTrace();
+			}	
 	}
 
 }
