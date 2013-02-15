@@ -1,5 +1,7 @@
 package com.UBC417.A2.Helpers;
 
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
+
 import java.util.Date;
 
 import com.UBC417.A2.Data.Seat;
@@ -33,12 +35,17 @@ public class Worker {
 			String LastName = (String) r.getProperty("LastName");
 			
 			// Retry transaction
-			Seat.ReserveSeats(Flight1, Flight1Seat, Flight2, Flight2Seat, Flight3, Flight3Seat, Flight4, Flight4Seat, FirstName, LastName);
-			
-			// Remove reservation. If transaction failed, Seat.ReserveSeats will add a new reservation into the datastore again
-			DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-			Key k = r.getKey();
-			ds.delete(k);
+			if (Seat.ReserveSeats(Flight1, Flight1Seat, Flight2, Flight2Seat, Flight3, Flight3Seat, Flight4, Flight4Seat, FirstName, LastName)) {
+				// Reserve OK. Remove reservation.
+				DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+				Key k = r.getKey();
+				ds.delete(k);
+			} else {
+				// Reserve not OK. Try again in 10s.
+				Thread.sleep(10000);
+				Queue q = QueueFactory.getDefaultQueue();
+				q.add(withUrl("/worker"));
+			}
 		}
 	}
 }

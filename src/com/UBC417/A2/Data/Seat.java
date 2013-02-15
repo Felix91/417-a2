@@ -56,6 +56,13 @@ public class Seat {
 				FilterOperator.EQUAL, null);
 		return ds.prepare(q).asIterable();
 	}
+	
+	// Returns all  seats on a specific flight(FlightKey)
+	public static Iterable<Entity> GetSeats(String FlightName) {
+		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+		Query q = new Query(FlightName);
+		return ds.prepare(q).asIterable();
+	}
 
 	// Reserves a specific seat(SeatID) on a specific flight(FlightKey)
 	public static boolean ReserveSeat(String FlightName, String SeatID,
@@ -104,10 +111,6 @@ public class Seat {
 						e3.getProperty("PersonSitting") != null ||
 						e4.getProperty("PersonSitting") != null)
 				{
-					// Seat is taken. Create SeatReservation and add a task into push queue
-					SeatReservation.CreateReservation(Flight1, Flight1Seat, Flight2, Flight2Seat, Flight3, Flight3Seat, Flight4, Flight4Seat, FirstName, LastName, true);
-					Queue q = QueueFactory.getDefaultQueue();
-					q.add(withUrl("/worker"));
 					return false;
 				}
 				

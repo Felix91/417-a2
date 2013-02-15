@@ -22,10 +22,10 @@ public class SelectSeatServlet extends HttpServlet {
 		String flight3 = req.getParameter("Flight3");
 		String flight4 = req.getParameter("Flight4");
 		
-		Iterable<Entity> flight1Seats = Seat.GetFreeSeats(flight1);
-		Iterable<Entity> flight2Seats = Seat.GetFreeSeats(flight2);
-		Iterable<Entity> flight3Seats = Seat.GetFreeSeats(flight3);
-		Iterable<Entity> flight4Seats = Seat.GetFreeSeats(flight4);
+		Iterable<Entity> flight1Seats = Seat.GetSeats(flight1);
+		Iterable<Entity> flight2Seats = Seat.GetSeats(flight2);
+		Iterable<Entity> flight3Seats = Seat.GetSeats(flight3);
+		Iterable<Entity> flight4Seats = Seat.GetSeats(flight4);
 		
 		req.setAttribute("flight1Seats", flight1Seats);
 		req.setAttribute("flight2Seats", flight2Seats);

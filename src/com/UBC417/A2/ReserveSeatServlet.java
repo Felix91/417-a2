@@ -1,5 +1,7 @@
 package com.UBC417.A2;
 
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
+
 import java.io.IOException;
 
 import javax.servlet.RequestDispatcher;
@@ -17,6 +19,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 
 @SuppressWarnings("serial")
 public class ReserveSeatServlet extends HttpServlet {
@@ -38,12 +42,22 @@ public class ReserveSeatServlet extends HttpServlet {
 		String FirstName = req.getParameter("FirstName");
 		String LastName = req.getParameter("LastName");
 		
+		String waitList = req.getParameter("waitList");
+		
 		String forwardTo = "/seatConfirmation.jsp";
 		try {
 			//if (!Seat.ReserveSeat(Flight, SeatID, FirstName, LastName)) {
 			if (!Seat.ReserveSeats(Flight1, Seat1ID, Flight2, Seat2ID, Flight3, Seat3ID, Flight4, Seat4ID, FirstName, LastName)) {
-				// seat not reserved, show error page
-				forwardTo = "/reserveSeatError.jsp";
+				// seat not reserved
+				if (waitList != null) {
+					// Seat is taken. Create SeatReservation and add a task into push queue
+					SeatReservation.CreateReservation(Flight1, Seat1ID, Flight2, Seat2ID, Flight3, Seat3ID, Flight4, Seat4ID, FirstName, LastName, true);
+					Queue q = QueueFactory.getDefaultQueue();
+					q.add(withUrl("/worker"));
+					forwardTo = "/reserveSeatWaiting.jsp";
+				} else {
+					forwardTo = "/reserveSeatError.jsp";
+				}
 			}
 		} catch (EntityNotFoundException e) {
 			// seat not found, show error page
